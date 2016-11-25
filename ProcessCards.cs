@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class ProcessCards
     {
@@ -27,21 +28,12 @@
 
         public List<Card> SortCards(List<Card> cardList)
         {
-            for (var x = 0; x < cardList.Count - 1; x++)
-            {
-                for (var y = x + 1; y < cardList.Count; y++)
-                {
-                    if (cardList[x].Suit > cardList[y].Suit || (cardList[x].Suit == cardList[y].Suit) && (cardList[x].Value > cardList[y].Value))
-                    {
-                        var temp = cardList[x];
-                        cardList[x] = cardList[y];
-                        cardList[y] = temp;
-                    }
+            IEnumerable<Card> newList = cardList.ToArray();
 
-                }
-
-            }
-            return cardList;
+            var itemList = from t in cardList.ToArray()
+                           orderby t.Suit,t.Value
+                           select t;
+            return itemList.ToList<Card>(); ;
         }
 
 
@@ -53,7 +45,7 @@
 
             foreach (Card card in cardList)
             {
-                Console.WriteLine(counter + " " + card.Suit + " " + card.Value);
+                Console.WriteLine(counter + " " + card.Value + " of " + card.Suit);
                 counter++;
             }
             Console.ReadLine();
@@ -62,7 +54,7 @@
         public List<Card> ShuffleCards(List<Card> cardList)
         {
             Random rnd = new Random();
-            
+           
             for (var x=0; x < 1000; x++)
             {
                 var temp = cardList[0];
